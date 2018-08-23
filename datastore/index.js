@@ -22,12 +22,13 @@ exports.create = (text, callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, {id: id, text: item});
-  }
+  var data = fs.readdir(exports.dataDir, (err, files) => { 
+    if (files.includes(`${id}.txt`)) {
+      fs.readFile(`${exports.dataDir}/${id}.txt`, (err, data) => ( callback(null, {id: id, text: data.toString()})));
+    } else {
+      callback(true, 'no');
+    }
+  });
 };
 
 exports.readAll = (callback) => {
